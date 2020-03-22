@@ -49,8 +49,11 @@ def format_data_from_url(url):
         del data['Lat']
         del data['Long']
 
+        if formatted_one_data['province'] != "" and formatted_one_data['province'] != formatted_one_data['country']:
+            continue
         formatted_one_data['dates'] = {}
         formatted_one_data['cum_dates'] = {}
+        formatted_one_data['from_startdate'] = {}
 
         formatted_one_data['country_population_data'] = get_country_population_data(formatted_one_data['country'], population_data=population_data)
 
@@ -71,12 +74,15 @@ def format_data_from_url(url):
             formatted_one_data['dates'][timestamp] = total - previous
             formatted_one_data['cum_dates'][timestamp] = total
 
+            if total > 10:
+                formatted_one_data['from_startdate'][timestamp] = total
+
         formatted_one_data['total'] = total
         if formatted_one_data['country_population_data'] != None:
             formatted_one_data['percentage'] = total / (float(formatted_one_data['country_population_data']['poblation']) * 1000)
         else:
             formatted_one_data['percentage'] = 0
-        formatted_data[formatted_one_data['country'] + formatted_one_data['province']] = formatted_one_data
+        formatted_data[formatted_one_data['country']] = formatted_one_data
 
     return formatted_data
 
