@@ -34,6 +34,7 @@ def format_data_from_url(url):
         del data['Long']
 
         formatted_one_data['dates'] = {}
+        formatted_one_data['cum_dates'] = {}
 
         total = 0
         for i in range(0, len(data)):
@@ -50,6 +51,7 @@ def format_data_from_url(url):
 
             total = int(date_data)
             formatted_one_data['dates'][timestamp] = total - previous
+            formatted_one_data['cum_dates'][timestamp] = total
 
         formatted_one_data['total'] = total
         formatted_data[formatted_one_data['country']] = formatted_one_data
