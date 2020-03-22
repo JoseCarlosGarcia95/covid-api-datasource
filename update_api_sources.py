@@ -16,10 +16,26 @@ def serialize_csv_from_url(url):
     csv_data = read_url(url)
     return list(csv.DictReader(io.StringIO(csv_data)))
 
+def read_country_population_data():
+    with open('data/country-by-population-and-density.json', 'r') as country_density_file:
+        return json.loads(country_density_file.read())
+
+def get_country_population_data(country, population_data = None):
+    if population_data == None:
+        population_data = read_country_population_data()
+
+    for country_data in population_data['data']:
+        if country_data['name'] == country:
+            return {'density': country_data['Density'], 'poblation': country_data['pop2019'], 'area': country_data['area']}
+
+    return None
+
 def format_data_from_url(url):
     formatted_data = {}
 
     raw_data = serialize_csv_from_url(url)
+
+    population_data = read_country_population_data()
 
     for data in raw_data:
         formatted_one_data = {}
@@ -35,6 +51,8 @@ def format_data_from_url(url):
 
         formatted_one_data['dates'] = {}
         formatted_one_data['cum_dates'] = {}
+
+        formatted_one_data['country_population_data'] = get_country_population_data(formatted_one_data['country'], population_data=population_data)
 
         total = 0
         for i in range(0, len(data)):
