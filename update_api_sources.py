@@ -72,7 +72,11 @@ def format_data_from_url(url):
             formatted_one_data['cum_dates'][timestamp] = total
 
         formatted_one_data['total'] = total
-        formatted_data[formatted_one_data['country']] = formatted_one_data
+        if formatted_one_data['country_population_data'] != None:
+            formatted_one_data['percentage'] = total / (float(formatted_one_data['country_population_data']['poblation']) * 1000)
+        else:
+            formatted_one_data['percentage'] = 0
+        formatted_data[formatted_one_data['country'] + formatted_one_data['province']] = formatted_one_data
 
     return formatted_data
 
